@@ -21,7 +21,7 @@ type envConfig struct {
 	NATSServer string `envconfig:"NATS_SERVER" default:"http://localhost:4222" required:"true"`
 
 	// Subject is the nats subject to subscribe for cloudevents on.
-	Subject string `envconfig:"SUBJECT" default:"sample" required:"true"`
+	Subject string `envconfig:"SUBJECT" default:"sample.>" required:"true"`
 }
 
 func main() {
@@ -35,8 +35,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create nats protocol, %s", err.Error())
 	}
-
 	defer p.Close(ctx)
+
+	log.Printf("Listening for cloudevents on NATS subject: %s", env.Subject)
 
 	c, err := cloudevents.NewClient(p)
 	if err != nil {

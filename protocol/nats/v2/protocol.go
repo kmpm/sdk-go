@@ -7,11 +7,24 @@ package nats
 
 import (
 	"context"
+
 	"github.com/cloudevents/sdk-go/v2/binding"
 	"github.com/cloudevents/sdk-go/v2/protocol"
 
 	"github.com/nats-io/nats.go"
 )
+
+type ctxKey string
+
+const (
+	ctxKeySubject ctxKey = "subject"
+)
+
+// WithSubject returns a new context with the subject set to the provided value.
+// This subject will be used when sending or receiving messages and overrides the default.
+func WithSubject(ctx context.Context, subject string) context.Context {
+	return context.WithValue(ctx, ctxKeySubject, subject)
+}
 
 // Protocol is a reference implementation for using the CloudEvents binding
 // integration. Protocol acts as both a NATS client and a NATS handler.
@@ -28,6 +41,7 @@ type Protocol struct {
 }
 
 // NewProtocol creates a new NATS protocol.
+// send and receive subject are required but can be overridden by the context.
 func NewProtocol(url, sendSubject, receiveSubject string, natsOpts []nats.Option, opts ...ProtocolOption) (*Protocol, error) {
 	conn, err := nats.Connect(url, natsOpts...)
 	if err != nil {

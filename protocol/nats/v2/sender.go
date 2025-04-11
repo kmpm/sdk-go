@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+
 	"github.com/cloudevents/sdk-go/v2/binding"
 	"github.com/cloudevents/sdk-go/v2/protocol"
 
@@ -56,6 +57,14 @@ func NewSenderFromConn(conn *nats.Conn, subject string, opts ...SenderOption) (*
 	return s, nil
 }
 
+func (s *Sender) getSubject(ctx context.Context) string {
+	subject, ok := ctx.Value(ctxKeySubject).(string)
+	if ok {
+		return subject
+	}
+	return s.Subject
+}
+
 func (s *Sender) Send(ctx context.Context, in binding.Message, transformers ...binding.Transformer) (err error) {
 	defer func() {
 		if err2 := in.Finish(err); err2 != nil {
@@ -71,7 +80,7 @@ func (s *Sender) Send(ctx context.Context, in binding.Message, transformers ...b
 	if err = WriteMsg(ctx, in, writer, transformers...); err != nil {
 		return err
 	}
-	return s.Conn.Publish(s.Subject, writer.Bytes())
+	return s.Conn.Publish(s.getSubject(ctx), writer.Bytes())
 }
 
 // Close implements Closer.Close

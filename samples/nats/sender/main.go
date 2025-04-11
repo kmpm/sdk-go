@@ -64,13 +64,24 @@ func main() {
 				Sequence: i,
 				Message:  fmt.Sprintf("Hello, %s!", contentType),
 			})
-
-			if result := c.Send(context.Background(), e); cloudevents.IsUndelivered(result) {
+			subj := buildSubject(env.Subject, i)
+			ctx := cenats.WithSubject(context.Background(), subj)
+			if result := c.Send(ctx, e); cloudevents.IsUndelivered(result) {
 				log.Printf("failed to send: %v", err)
 			} else {
-				log.Printf("sent: %d, accepted: %t", i, cloudevents.IsACK(result))
+				log.Printf("sent: %d, accepted: %t, subject: %s", i, cloudevents.IsACK(result), subj)
 			}
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
+}
+
+// buildSubject using base and message index.
+// `<base>.[odd|even].<index>`
+func buildSubject(base string, i int) string {
+	n := "even"
+	if i%2 != 0 {
+		n = "odd"
+	}
+	return fmt.Sprintf("%s.%s.%d", base, n, i)
 }
