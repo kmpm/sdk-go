@@ -1,0 +1,12 @@
+package nats
+
+import (
+	"github.com/cloudevents/sdk-go/v2/protocol"
+)
+
+type Receiver struct {
+}
+
+var _ protocol.Receiver = (*Receiver)(nil)
+var _ protocol.Opener = (*Receiver)(nil)
+var _ protocol.Closer = (*Receiver)(nil)
