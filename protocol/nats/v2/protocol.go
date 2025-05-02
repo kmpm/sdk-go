@@ -21,7 +21,7 @@ const (
 )
 
 // WithSubject returns a new context with the subject set to the provided value.
-// This subject will be used when sending or receiving messages and overrides the default.
+// This subject will be used when sending messages and overrides the default.
 func WithSubject(ctx context.Context, subject string) context.Context {
 	return context.WithValue(ctx, ctxKeySubject, subject)
 }
@@ -41,7 +41,7 @@ type Protocol struct {
 }
 
 // NewProtocol creates a new NATS protocol.
-// send and receive subject are required but can be overridden by the context.
+// sendSubject are required but can be overridden by the send context later.
 func NewProtocol(url, sendSubject, receiveSubject string, natsOpts []nats.Option, opts ...ProtocolOption) (*Protocol, error) {
 	conn, err := nats.Connect(url, natsOpts...)
 	if err != nil {
@@ -59,6 +59,8 @@ func NewProtocol(url, sendSubject, receiveSubject string, natsOpts []nats.Option
 	return p, nil
 }
 
+// NewProtocol creates a new NATS protocol from existing nats connection.
+// sendSubject are required but can be overridden by the send context later.
 func NewProtocolFromConn(conn *nats.Conn, sendSubject, receiveSubject string, opts ...ProtocolOption) (*Protocol, error) {
 	var err error
 	p := &Protocol{

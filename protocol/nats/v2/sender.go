@@ -23,7 +23,11 @@ type Sender struct {
 	connOwned bool
 }
 
-// NewSender creates a new protocol.Sender responsible for opening and closing the NATS connection
+// NewSender creates a new protocol.
+// Sender responsible for opening and closing the NATS connection.
+//
+// The subject is required but can be overridden by the
+// send context later using WithSubject.
 func NewSender(url, subject string, natsOpts []nats.Option, opts ...SenderOption) (*Sender, error) {
 	conn, err := nats.Connect(url, natsOpts...)
 	if err != nil {
@@ -41,8 +45,10 @@ func NewSender(url, subject string, natsOpts []nats.Option, opts ...SenderOption
 	return s, nil
 }
 
-// NewSenderFromConn creates a new protocol.Sender which leaves responsibility for opening and closing the NATS
-// connection to the caller
+// NewSenderFromConn creates a new protocol from existing connection.
+// This leaves responsibility for opening and closing the NATS connection to the caller.
+//
+// The subject is required but can be overridden by the send context later using WithSubject.
 func NewSenderFromConn(conn *nats.Conn, subject string, opts ...SenderOption) (*Sender, error) {
 	s := &Sender{
 		Conn:    conn,
