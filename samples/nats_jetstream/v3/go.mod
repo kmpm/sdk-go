@@ -6,10 +6,10 @@ toolchain go1.23.8
 
 require (
 	github.com/cloudevents/sdk-go/protocol/nats_jetstream/v3 v3.0.0
-	github.com/cloudevents/sdk-go/v2 v2.16.0
+	github.com/cloudevents/sdk-go/v2 v2.16.1
 	github.com/google/uuid v1.6.0
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/nats-io/nats.go v1.41.2
+	github.com/nats-io/nats.go v1.45.0
 )
 
 require (
@@ -21,8 +21,8 @@ require (
 	github.com/nats-io/nuid v1.0.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/time v0.0.0-20211116232009-f0f3c7e86c11 // indirect
 )
 
