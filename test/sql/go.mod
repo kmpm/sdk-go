@@ -10,7 +10,7 @@ replace github.com/cloudevents/sdk-go/sql/v2 => ./../../sql/v2
 
 require (
 	github.com/cloudevents/sdk-go/sql/v2 v2.16.0
-	github.com/cloudevents/sdk-go/v2 v2.16.0
+	github.com/cloudevents/sdk-go/v2 v2.16.1
 )
 
 require (
